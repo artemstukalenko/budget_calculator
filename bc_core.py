@@ -21,7 +21,7 @@ class ExchangeRate:
     def __init__(self, id, currency_a, currency_b, rate):
         self.id = id
         self.currency_a = currency_a
-        self.currency_b = currency_b,
+        self.currency_b = currency_b
         self.rate = rate
 
 

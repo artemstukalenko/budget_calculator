@@ -1,12 +1,14 @@
 from psycopg2 import OperationalError
 
 import bc_query
+import bc_calculate
 
 incorrect_password_error = 'password authentication failed for user "postgres"'
 
 def provide_data(accounts, ex_rates):
-    print(f'Accounts = {accounts}')
-    print(f'Rates = {ex_rates}')
+    bc_calculate.calculate_ex_rates(ex_rates)
+    print(f'Total UAH = {"{:,}".format(bc_calculate.calculate_total_uah(accounts))} ₴')
+    print(f'Total USD = {"{:,}".format(bc_calculate.calculate_total_usd(accounts))} $')
 
 def request_password():
     password = input("Enter password: ")
