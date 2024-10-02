@@ -80,3 +80,35 @@ def calculate_total_liquid_usd(accounts):
 def calculate_total_liquid_share():
     result = (total_liquid_usd / total_usd) * 100
     return Decimal(result).quantize(Decimal('0.00'), rounding = ROUND_DOWN)
+
+
+def calculate_share_of_money_with_interest_rate(accounts):
+    uah_acc_sum = sum(
+        map(lambda acc: acc.amount / usd_to_uah,
+            filter(lambda acc: acc.currency == 'UAH' and acc.interest_rate != 0, accounts)))
+    usd_acc_sum = sum(
+        map(lambda acc: acc.amount, filter(lambda acc: acc.currency == 'USD' and acc.interest_rate != 0, accounts)))
+    eur_acc_sum = sum(
+        map(lambda acc: acc.amount * usd_to_eur,
+            filter(lambda acc: acc.currency == 'EUR' and acc.interest_rate != 0, accounts)))
+
+    total_interest_rate_usd = uah_acc_sum + usd_acc_sum + eur_acc_sum
+
+    result = (total_interest_rate_usd / total_usd) * 100
+    return Decimal(result).quantize(Decimal('0.00'), rounding=ROUND_DOWN)
+
+
+def calculate_share_of_accounts_beat_inflation(accounts):
+    uah_acc_sum = sum(
+        map(lambda acc: acc.amount / usd_to_uah,
+            filter(lambda acc: acc.currency == 'UAH' and acc.interest_rate > 3, accounts)))
+    usd_acc_sum = sum(
+        map(lambda acc: acc.amount, filter(lambda acc: acc.currency == 'USD' and acc.interest_rate > 3, accounts)))
+    eur_acc_sum = sum(
+        map(lambda acc: acc.amount * usd_to_eur,
+            filter(lambda acc: acc.currency == 'EUR' and acc.interest_rate > 3, accounts)))
+
+    total_interest_rate_usd = uah_acc_sum + usd_acc_sum + eur_acc_sum
+
+    result = (total_interest_rate_usd / total_usd) * 100
+    return Decimal(result).quantize(Decimal('0.00'), rounding=ROUND_DOWN)
