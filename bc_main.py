@@ -7,7 +7,7 @@ incorrect_password_error = 'password authentication failed for user "postgres"'
 
 def provide_data(accounts, ex_rates):
     bc_calculate.calculate_ex_rates(ex_rates)
-    print('\n\n\n')
+    print('\n')
     print('****************************************************************')
     print(f'Total UAH = {"{:,}".format(bc_calculate.calculate_total_uah(accounts))} ₴')
     print(f'Total USD = {"{:,}".format(bc_calculate.calculate_total_usd(accounts))} $')
@@ -18,6 +18,9 @@ def provide_data(accounts, ex_rates):
     print(f'{bc_calculate.calculate_share_of_money_with_interest_rate(accounts)}% of net worth has interest rate')
     print(f'{bc_calculate.calculate_share_of_accounts_beat_inflation(accounts)}% of net worth has interest rate that can beat inflation')
     print('****************************************************************')
+    exposure_table = bc_calculate.calculate_exposures(accounts)
+    for account_group, share in exposure_table.items():
+        print(f'{share:5.2f}% of net worth is in {account_group.upper()}')
 
 def request_password():
     password = input("Enter password: ")

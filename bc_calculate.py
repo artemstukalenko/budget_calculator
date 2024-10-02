@@ -112,3 +112,38 @@ def calculate_share_of_accounts_beat_inflation(accounts):
 
     result = (total_interest_rate_usd / total_usd) * 100
     return Decimal(result).quantize(Decimal('0.00'), rounding=ROUND_DOWN)
+
+
+def calculate_exposures(accounts):
+    exposure_table = {}
+
+    account_group_to_account = {}
+    account_groups = set(map(lambda acc: acc.account_group, accounts))
+
+    for account_group in account_groups:
+        account_group_to_account[account_group] = []
+
+    for account in accounts:
+        account_group_to_account[account.account_group].append(account)
+
+    for account_group, accounts_in_group in account_group_to_account.items():
+        account_group_sum = calculate_account_group_sum_usd(accounts_in_group)
+        exposure_table[account_group] = Decimal((account_group_sum / total_usd) * 100).quantize(Decimal('0.00'), rounding=ROUND_DOWN)
+
+    return dict(sorted(exposure_table.items(), key = lambda item: item[1], reverse = True))
+
+
+def calculate_account_group_sum_usd(accounts_in_group):
+    return sum(map(lambda account: calculate_account_sum_usd(account), accounts_in_group))
+
+def calculate_account_sum_usd(account):
+    account_sum_usd = 0
+
+    if account.currency == 'UAH':
+        account_sum_usd = account.amount / usd_to_uah
+    elif account.currency == 'USD':
+        account_sum_usd = account.amount
+    elif account.currency == 'EUR':
+        account_sum_usd = account.amount * usd_to_eur
+
+    return account_sum_usd
