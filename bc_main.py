@@ -9,6 +9,10 @@ def provide_data(accounts, ex_rates):
     bc_calculate.calculate_ex_rates(ex_rates)
     print(f'Total UAH = {"{:,}".format(bc_calculate.calculate_total_uah(accounts))} ₴')
     print(f'Total USD = {"{:,}".format(bc_calculate.calculate_total_usd(accounts))} $')
+    print('****************************************************************')
+    print(f'Total liquid UAH = {"{:,}".format(bc_calculate.calculate_total_liquid_uah(accounts))} ₴')
+    print(f'Total liquid USD = {"{:,}".format(bc_calculate.calculate_total_liquid_usd(accounts))} $')
+    print(f'{bc_calculate.calculate_total_liquid_share()}% of net worth is liquid')
 
 def request_password():
     password = input("Enter password: ")
