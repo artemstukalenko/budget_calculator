@@ -15,3 +15,15 @@ CREATE TABLE exchange_rates (
 	currency_b VARCHAR(5) NOT NULL,
 	rate DECIMAL
 );
+
+CREATE TABLE history (
+	id SERIAL PRIMARY KEY,
+	date DATE,
+	total_uah DECIMAL,
+    total_usd DECIMAL,
+    total_liq_uah DECIMAL,
+    total_liq_usd DECIMAL,
+    liquid_percent DECIMAL,
+    interest_rate_percent DECIMAL,
+    exposure_table VARCHAR(1000)
+);
