@@ -1,6 +1,3 @@
-from idlelib.pyshell import idle_showwarning
-
-
 class Account:
     def __init__(self, id, name, account_group, currency, amount,
                  is_liquid, is_accumulative, interest_rate):
