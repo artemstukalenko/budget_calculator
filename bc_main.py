@@ -1,5 +1,5 @@
 from psycopg2 import OperationalError
-
+import argparse
 import bc_query
 import bc_calculate
 
@@ -23,7 +23,13 @@ def provide_data(accounts, ex_rates):
         print(f'{share:5.2f}% of net worth is in {account_group.upper()}')
 
 def request_password():
-    password = input("Enter password: ")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--password", type=str, help="DB password")
+    parser.add_argument("--persist", type=bool, help="Whether to persist result to DB")
+
+    args = parser.parse_args()
+
+    password = args.password
     if password:
         try:
             accounts, ex_rates = bc_query.pull_data(password)
