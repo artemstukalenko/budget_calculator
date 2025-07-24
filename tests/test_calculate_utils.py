@@ -79,3 +79,25 @@ def test_calculate_total_share_with_interest_rate(setup_accounts):
     total_usd_with_interest_share_result = bc_calculate.calculate_share_of_money_with_interest_rate(setup_accounts)
 
     assert Decimal(total_usd_with_interest_share_expected).quantize(Decimal('0.00'), rounding=ROUND_DOWN) == total_usd_with_interest_share_result
+
+
+def test_calculate_exposures(setup_accounts):
+    total_usd = (100 / 10) + 10 + (10 * 0.1) + (100 / 10) + 1000 + (100 * 0.1)
+    total_cash_usd = (100 / 10) + 10 + (10 * 0.1)
+    total_card_usd = 100 / 10
+    total_savings_usd = 1000
+    total_crypto_usd = 100 * 0.1
+
+    cash_share = (total_cash_usd / total_usd) * 100
+    card_share = (total_card_usd / total_usd) * 100
+    savings_share = (total_savings_usd / total_usd) * 100
+    crypto_share = (total_crypto_usd / total_usd) * 100
+
+    expected = {
+        "Cash": Decimal(cash_share).quantize(Decimal('0.00'), rounding=ROUND_DOWN),
+        "Card": Decimal(card_share).quantize(Decimal('0.00'), rounding=ROUND_DOWN),
+        "Savings": Decimal(savings_share).quantize(Decimal('0.00'), rounding=ROUND_DOWN),
+        "Crypto": Decimal(crypto_share).quantize(Decimal('0.00'), rounding=ROUND_DOWN)
+    }
+
+    assert expected == bc_calculate.calculate_exposures(setup_accounts)
