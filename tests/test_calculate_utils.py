@@ -1,3 +1,5 @@
+from decimal import Decimal, ROUND_DOWN
+
 import pytest
 
 from src import bc_calculate
@@ -45,3 +47,35 @@ def test_calculate_total_usd(setup_accounts):
     total_usd_expected = (100 / 10) + 10 + (10 * 0.1) + (100 / 10) + 1000 + (100 * 0.1)
     total_usd_result = bc_calculate.calculate_total_usd(setup_accounts)
     assert total_usd_expected == total_usd_result
+
+
+def test_calculate_total_liq_uah(setup_accounts):
+    total_liq_uah_expected = 100 + (10 * 10) + (10 * 100) + 100
+    total_liq_uah_result = bc_calculate.calculate_total_liquid_uah(setup_accounts)
+    assert total_liq_uah_expected == total_liq_uah_result
+
+
+def test_calculate_total_liq_usd(setup_accounts):
+    total_liq_usd_expected = (100 / 10) + 10 + (10 * 0.1) + (100 / 10)
+    total_liq_usd_result = bc_calculate.calculate_total_liquid_usd(setup_accounts)
+    assert total_liq_usd_expected == total_liq_usd_result
+
+
+def test_calculate_total_liq_share(setup_accounts):
+    total_liq_usd = (100 / 10) + 10 + (10 * 0.1) + (100 / 10)
+    total_usd = (100 / 10) + 10 + (10 * 0.1) + (100 / 10) + 1000 + (100 * 0.1)
+    total_liq_share_usd_expected = (total_liq_usd / total_usd) * 100
+
+    total_liq_share_result = bc_calculate.calculate_total_liquid_share()
+
+    assert Decimal(total_liq_share_usd_expected).quantize(Decimal('0.00'), rounding=ROUND_DOWN) == total_liq_share_result
+
+
+def test_calculate_total_share_with_interest_rate(setup_accounts):
+    total_usd_with_interest = 1000 + (100 * 0.1)
+    total_usd = (100 / 10) + 10 + (10 * 0.1) + (100 / 10) + 1000 + (100 * 0.1)
+    total_usd_with_interest_share_expected = (total_usd_with_interest / total_usd ) * 100
+
+    total_usd_with_interest_share_result = bc_calculate.calculate_share_of_money_with_interest_rate(setup_accounts)
+
+    assert Decimal(total_usd_with_interest_share_expected).quantize(Decimal('0.00'), rounding=ROUND_DOWN) == total_usd_with_interest_share_result
