@@ -83,6 +83,7 @@ def run():
         non_zero["Other (0.0%)"] = 0.0
 
     fig_pie, axes_pie = plt.subplots(1, 1, figsize=(14, 10))
+    fig_pie.canvas.manager.set_window_title("Latest Account Distribution")
     axes_pie.pie(non_zero, labels=non_zero.index, autopct='%1.1f%%', startangle=140)
     axes_pie.set_title("Latest Account Distribution")
 
