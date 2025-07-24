@@ -9,7 +9,7 @@ exchange_rates = [ExchangeRate(1, 'USD', 'UAH', 10),
                   ExchangeRate(2, 'EUR', 'UAH', 100),
                   ExchangeRate(3, 'USD', 'EUR', 0.1)]
 
-@pytest.fixture
+@pytest.fixture(scope="module", autouse=True)
 def setup_ex_rates():
     bc_calculate.calculate_ex_rates(exchange_rates)
 
@@ -25,15 +25,15 @@ def setup_accounts():
                 ]
 
 
-def test_usd_to_uah_calculation(setup_ex_rates):
+def test_usd_to_uah_calculation():
     assert bc_calculate.usd_to_uah == 10
 
 
-def test_eur_to_uah_calculation(setup_ex_rates):
+def test_eur_to_uah_calculation():
     assert bc_calculate.eur_to_uah == 100
 
 
-def test_usd_to_eur_calculation(setup_ex_rates):
+def test_usd_to_eur_calculation():
     assert bc_calculate.usd_to_eur == 0.1
 
 
