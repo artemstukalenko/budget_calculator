@@ -1,17 +1,11 @@
-import argparse
 import ast
 
 import pandas as pd
 import matplotlib.pyplot as plt
-from sqlalchemy import create_engine
+from bc_db_connect import get_engine
 
 def run():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--password", type=str, help="DB password")
-
-    args = parser.parse_args()
-
-    engine = create_engine(f"postgresql+psycopg2://postgres:{args.password}@localhost:5432/budget_calculator_db")
+    engine = get_engine()
 
     # Query the data
     query = "SELECT * FROM history ORDER BY date;"

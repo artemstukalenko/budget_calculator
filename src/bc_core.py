@@ -1,14 +1,19 @@
-class Account:
-    def __init__(self, id, name, account_group, currency, amount,
-                 is_liquid, is_accumulative, interest_rate):
-        self.id = id
-        self.name = name
-        self.account_group = account_group
-        self.currency = currency
-        self.amount = amount
-        self.is_liquid = is_liquid
-        self.is_accumulative = is_accumulative
-        self.interest_rate = interest_rate
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Numeric, Boolean, DateTime
+
+Base = declarative_base()
+
+class Account(Base):
+    __tablename__ = "accounts"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    account_group = Column(String)
+    currency = Column(String)
+    amount = Column(Numeric)
+    is_liquid = Column(Boolean)
+    is_accumulative = Column(Boolean)
+    interest_rate = Column(Numeric)
 
 
     def __repr__(self):
@@ -17,19 +22,32 @@ class Account:
 
 
 
-class ExchangeRate:
-    def __init__(self, id, currency_a, currency_b, rate):
-        self.id = id
-        self.currency_a = currency_a
-        self.currency_b = currency_b
-        self.rate = rate
+class ExchangeRate(Base):
+    __tablename__="exchange_rates"
+
+    id = Column(Integer, primary_key=True)
+    currency_a = Column(String)
+    currency_b = Column(String)
+    rate = Column(Numeric)
 
 
     def __repr__(self):
         return f'ExchangeRate(id = {self.id}, currency_a = {self.currency_a}, currency_b = {self.currency_b}, rate = {self.rate})'
 
 
-class HistoryRecord:
+class HistoryRecord(Base):
+    __tablename__ = "history"
+
+    id = Column(Integer, primary_key=True)
+    date = Column(DateTime)
+    total_uah = Column(Numeric)
+    total_usd = Column(Numeric)
+    total_liq_uah = Column(Numeric)
+    total_liq_usd = Column(Numeric)
+    liquid_percent = Column(Numeric)
+    interest_rate_percent = Column(Numeric)
+    exposure_table = Column(String)
+
     def __init__(self, date, total_uah, total_usd, total_liq_uah,
                  total_liq_usd, liquid_percent, interest_rate_percent,
                  exposure_table):

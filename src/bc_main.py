@@ -24,29 +24,26 @@ def provide_data(accounts, ex_rates) -> HistoryRecord:
 def request_password():
     parser = argparse.ArgumentParser()
     parser.add_argument("--persist", action='store_true', help="Whether to persist result to DB")
-    parser.add_argument("--password", type=str, help="DB password")
 
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
-    password = args.password
-    if password:
-        try:
-            accounts, ex_rates = bc_query.pull_data(password)
-            record = provide_data(accounts, ex_rates)
-            print(record)
+    try:
+        accounts, ex_rates = bc_query.pull_data()
+        record = provide_data(accounts, ex_rates)
+        print(record)
 
-            if args.persist:
-                bc_persist.persist(record)
+        if args.persist:
+            bc_persist.persist(record)
 
-        except OperationalError as error:
-            error_message = str(error)
+    except OperationalError as error:
+        error_message = str(error)
 
-            if incorrect_password_error in error_message:
-                print('Incorrect password!')
-                request_password()
-            else:
-                print('An error occurred while pulling data from DB:')
-                print(error_message)
+        if incorrect_password_error in error_message:
+            print('Incorrect password!')
+            request_password()
+        else:
+            print('An error occurred while pulling data from DB:')
+            print(error_message)
 
 
 request_password()
